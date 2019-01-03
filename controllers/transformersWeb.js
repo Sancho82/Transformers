@@ -3,23 +3,37 @@ const models = require('../models');
 const transformers = express();
 
 transformers.get('/', (req, res) => {
-  res.render('../views/layouts/home.handlebars');
-});
-
-transformers.get('/main', (req, res) => {
-  models.transformer.findAll().then(result => {
-    res.json(result);
+  models.transformer.findAll().then(transformers => {
+    res.locals.transformers = transformers;
+    res.render('transformers/listall.handlebars', {title: 'Home', name: 'Szani'});
   });
 });
 
+transformers.get('/new', (req, res) => {
+  res.render('transformers/new.handlebars');
+});
+
 transformers.get('/:id', (req, res) => {
-  models.transformer.find({where: {id: req.params.id}}).then(result => {
-    if (result) {
-      res.json(result);
+  models.transformer.findById(req.params.id).then(transformer => {
+    if (transformer) {
+      res.locals.transformer = transformer;
+      res.render('transformers/show.handlebars');
     } else {
       res.status(404).send('No transformer with such an id was not found');
     }
   });
+});
+
+transformers.get('/:id/edit', (req, res) => {
+  models.transformer.findById(req.params.id)
+    .then(transformer => {
+      if (transformer) {
+        res.locals = transformer;
+        res.render('transformers/edit.handlebars');
+      } else {
+        res.status(404).send('No transformer with such an id was not found.');
+      }
+    });
 });
 
 transformers.post('/', (req, res) => {
@@ -30,9 +44,7 @@ transformers.post('/', (req, res) => {
           name: req.body.name,
           faction: req.body.faction,
           power: req.body.power
-        }).then(result => {
-          res.json(result);
-        });
+        }).then(res.redirect('transformers/listall.handlebars'));
       } else {
         res.send('Please fill in all details if you wish to create a new transformer.');
       }
@@ -42,41 +54,16 @@ transformers.post('/', (req, res) => {
   });
 });
 
-transformers.put('/:name', (req, res) => {
-  models.transformer.findOne({where: {name: req.params.name}}).then(result => {
-    if (result) {
-      models.transformer.update({
-        faction: req.body.faction,
-        power: req.body.power
-      }, {
-        where: {name: req.params.name}
-      }).then(res.send(`${req.params.name} has been successfully updated.`));
-    } else {
-      res.send('Sorry, there is no transformer with such a name in our database at the moment.');
-    }
-  });
+transformers.put('/:id', (req, res) => {
+  models.transformer.update(req.body,
+    { where: { id: req.params.id } })
+    .then(res.redirect(`/${req.params.id}`));
 });
 
 transformers.delete('/:id', (req, res) => {
-  models.transformer.findOne({where: {id: req.params.id}}).then(result => {
-    if (result) {
-      models.transformer.destroy({
-        where: {id: req.params.id}}).then(res.send(`Transformer with id ${req.params.id} has been successfully deleted.`));
-    } else {
-      res.send('There is no transformer with such an id to delete.');
-    }
-  });
-});
-
-transformers.delete('/delete/:name', (req, res) => {
-  models.transformer.findOne({where: {name: req.params.name}}).then(result => {
-    if (result) {
-      models.transformer.destroy({
-        where: {name: req.params.name}}).then(res.send(`${req.params.name} has been successfully deleted.`));
-    } else {
-      res.send('There is no transformer with such a name to delete.');
-    }
-  });
+  models.transformer.destroy({
+    where: {id: req.params.id}})
+    .then(res.redirect('/'));
 });
 
 module.exports = transformers;

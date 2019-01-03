@@ -1,0 +1,28 @@
+<div class="table">
+  <table>
+    <thead>
+      <td>Id&emsp;</td>
+      <td>Name&emsp;</td>
+      <td>Faction&emsp;</td>
+      <td style="text-align:center">Power&emsp;</td>
+      <form action="POST">
+        <td><a href="/transformers/views/transformers/new.handlebars" class="btn btn-success">New</a></td>
+      </form>
+    </thead>
+  {{#each transformers}}
+  <tr>
+    <td>{{id}}.&emsp;</td>
+    <td>{{name}}&emsp;</td>
+    <td>{{faction}}&emsp;</td>
+    <td style="text-align:right">{{power}}&emsp;</td>
+    <td><a href="/{{id}}" class="btn btn-primary">Show</a></td>
+    <td><a href="/{{id}}/edit" class="btn btn-warning">Edit</a></td>
+    <td>
+      <form method="POST" action="/{{id}}?_method=DELETE">
+        <input class="btn btn-danger" type="submit" value="Delete" />
+      </form>
+    </td>
+  </tr>
+  {{/each}}
+  </table>
+</div>

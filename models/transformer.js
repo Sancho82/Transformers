@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const transformer = sequelize.define('transformer', {
     name: DataTypes.STRING,

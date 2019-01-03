@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+      <div class="col-12">
+        <h2>Edit {{transformer.name}}</h2>
+
+      </div>
+  </div>
+  <div>
+    <form method="POST" action="/transformersWeb/{{transformer.id}}?_method=PUT">
+      <div class="form-group">
+        <label for="faction">Faction</label>
+        <input type="text" class="form-control" name="faction" value="{{transformer.faction}}" />
+      </div>
+      <div class="form-group">
+        <label for="power">Power</label>
+        <input type="text" class="form-control" name="power" value="{{transformer.power}}">
+      </div>
+      <input class="btn btn-success" type="submit" value="update">
+    </form>
+  </div>
+</div>
