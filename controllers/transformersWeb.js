@@ -29,6 +29,7 @@ transformers.get('/:id/edit', (req, res) => {
     .then(transformer => {
       if (transformer) {
         res.locals = transformer;
+        console.log(transformer);
         res.render('transformers/edit.handlebars');
       } else {
         res.status(404).send('No transformer with such an id was not found.');
@@ -44,7 +45,7 @@ transformers.post('/', (req, res) => {
           name: req.body.name,
           faction: req.body.faction,
           power: req.body.power
-        }).then(res.redirect('transformers/listall.handlebars'));
+        }).then(res.redirect('/'));
       } else {
         res.send('Please fill in all details if you wish to create a new transformer.');
       }

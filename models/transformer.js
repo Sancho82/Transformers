@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     faction: DataTypes.STRING,
     power: DataTypes.INTEGER
   }, {});
-  transformer.associate = function(models) {
+  transformer.associate = function (models) {
     // associations can be defined here
   };
   return transformer;
